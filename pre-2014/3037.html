@@ -1,0 +1,33 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>mysql 权限分配</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">mysql 权限分配</font>
+<br>
+
+<font size="2">2008-03-18 10:37:03</font>
+<p>
+<pre>
+1、 本地访问，root用户拥有操作所有数据的权限：
+GRANT ALL PRIVILEGES ON *.* TO root@localhost IDENTIFIED BY "123456";
+
+２、赋予某用户只有本地操作某一个数据库的权限：
+CREATE DATABASE xoops；
+　　GRANT ALL PRIVILEGES ON xoops.* TO xoops_root@localhost IDENTIFIED BY "654321";
+
+３、赋予某用户可以远程操作某一个数据库的权限：
+　　GRANT ALL PRIVILEGES ON xoops.* TO xoops_root@"%" IDENTIFIED BY "654321"; 
+</pre>

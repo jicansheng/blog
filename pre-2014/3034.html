@@ -1,0 +1,123 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>转：expdp/impdp 使用总结</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">转：expdp/impdp 使用总结</font>
+<br>
+
+<font size="2">2008-07-12 20:55:27</font>
+<p>
+<pre>
+<strong><span style="font-size: 12pt;">1.</span></strong><span style="font-size: 7pt;"> </span><strong><span style="font-size: 12pt;">使用</span></strong><strong><span style="font-size: 12pt;">expdp</span></strong><strong><span style="font-size: 12pt;">要先在数据库中创建</span></strong><strong><span style="font-size: 12pt;">directory,</span></strong><strong><span style="font-size: 12pt;">并给相应的用户</span></strong><strong><span style="font-size: 12pt;">read,write</span></strong><strong><span style="font-size: 12pt;">权限</span></strong><strong><span style="font-size: 12pt;">.</span></strong>
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; line-height: 130%; text-align: left;" align="left"><span>SQL&gt;create directory dmpdir as '/u01/dmdir';
+SQL&gt;grant read,write on directory to test;</span>
+<p align="left"><strong><span style="font-size: 12pt;">2.</span></strong><span style="font-size: 7pt;"> </span><strong><span style="font-size: 12pt;">最常用导出方法</span></strong></p>
+
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; line-height: 130%; text-align: left;" align="left"><span>$expdp scott/tiger DUMPFILE=scott.dmp DIRECTORY=dmpdir SCHEMAS=test
+$expdp scott/tiger DUMPFILE=tmp_dump.dmp DIRECTORY=dmpdir TABLES=(tmp_test:p1,tmp_test:p2) JOB_NAME=tmp_dump LOGFILE=tmp_dump.log
+$expdp scott/tiger DUMPFILE=full.dmp DIRECTORY=dmpdir FULL=Y JOB_NAME=full
+$expdp scott/timer DUMPFILE=tmp_200703.dmp DIRECTORY=dmpdir TABLES=tmp QUERY=\"where to_char\(create_time,\'yyyy-mm-dd\'\)\&lt;\'2007-04\'\"</span>
+<p align="left"><strong><span style="font-size: 12pt;">常用一些参数说明</span></strong><strong><span style="font-size: 12pt;">: </span></strong></p>
+
+<div style="text-indent: 18pt; text-align: left;"><span style="font-size: 10.5pt;"><hr style="width: 146.05pt;" size="2" /></span></div>
+<p align="left"><span style="font-size: 10.5pt;">SCOTT/TIGER:</span><span style="font-size: 10.5pt;">用户</span><span style="font-size: 10.5pt;">/</span><span style="font-size: 10.5pt;">密码</span><span style="font-size: 10.5pt;">(*)</span></p>
+<p align="left"><span style="font-size: 10.5pt;">DUMPFILE:</span><span style="font-size: 10.5pt;">导出后的文件名</span><span style="font-size: 10.5pt;">(*)</span></p>
+<p align="left"><span style="font-size: 10.5pt;">DIRECTORY:</span><span style="font-size: 10.5pt;">导出文件存放位置</span><span style="font-size: 10.5pt;">(</span><span style="font-size: 10.5pt;">位于服务器端</span><span style="font-size: 10.5pt;">)(*)</span></p>
+<p align="left"><span style="font-size: 10.5pt;">CONTENT:</span><span style="font-size: 10.5pt;">导出文件中包含的内容</span><span style="font-size: 10.5pt;">(</span><span style="font-size: 10.5pt;">默认为</span><span style="font-size: 10.5pt;">:ALL,</span><span style="font-size: 10.5pt;">可选</span><span style="font-size: 10.5pt;">DATA_ONLY/METADATA_ONLY)</span></p>
+<p align="left"><span style="font-size: 10.5pt;">FILESIZE:</span><span style="font-size: 10.5pt;">指定导出文件大小</span><span style="font-size: 10.5pt;">(</span><span style="font-size: 10.5pt;">单位为</span><span style="font-size: 10.5pt;">bytes).</span></p>
+<p align="left"><span style="font-size: 10.5pt;">JOB_NAME:</span><span style="font-size: 10.5pt;">此次导出进程使用的名称</span><span style="font-size: 10.5pt;">,</span><span style="font-size: 10.5pt;">方便跟踪查询</span><span style="font-size: 10.5pt;">(</span><span style="font-size: 10.5pt;">可选</span><span style="font-size: 10.5pt;">)</span></p>
+<p align="left"><span style="font-size: 10.5pt;">LOGFILE:</span><span style="font-size: 10.5pt;">日志文件名</span><span style="font-size: 10.5pt;">(</span><span style="font-size: 10.5pt;">默认为</span><span style="font-size: 10.5pt;">:export.log)</span></p>
+
+<div style="text-indent: 18pt; text-align: left;"><span style="font-size: 10.5pt;"><hr style="width: 146.05pt;" size="2" /></span></div>
+<p align="left"><span style="font-size: 10.5pt;">INCLUDE:</span><span style="font-size: 10.5pt;">导出时包含指定的类型</span></p>
+<p align="left"><span style="font-size: 10.5pt;">(</span><span style="font-size: 10.5pt;">例</span><span style="font-size: 10.5pt;">:INCLUDE=TABLE_DATA, </span></p>
+<p align="left"><span style="font-size: 10.5pt;">INCLUDE=TABLE:"LIKE 'TAB%'"</span></p>
+<p align="left"><span style="font-size: 10.5pt;">INCLUDE=TABLE:”NOT LIKE ‘TAB%’”…)</span></p>
+<p align="left"><span style="font-size: 10.5pt;">EXCLUDE:</span><span style="font-size: 10.5pt;">导出时排除的数据类型</span><span style="font-size: 10.5pt;">(</span><span style="font-size: 10.5pt;">例</span><span style="font-size: 10.5pt;">:EXCLUDE=TABLE:EMP)</span></p>
+
+<div style="text-indent: 18pt; text-align: left;"><span style="font-size: 10.5pt;"><hr style="width: 146.05pt;" size="2" /></span></div>
+<p align="left"><span style="font-size: 10.5pt;">FULL:</span><span style="font-size: 10.5pt;">全库导出时使用</span><span style="font-size: 10.5pt;">(</span><span style="font-size: 10.5pt;">同</span><span style="font-size: 10.5pt;">EXP</span><span style="font-size: 10.5pt;">的</span><span style="font-size: 10.5pt;">FULL,</span><span style="font-size: 10.5pt;">默认为</span><span style="font-size: 10.5pt;">N)</span></p>
+<p align="left"><span style="font-size: 10.5pt;">SCHEMA:</span><span style="font-size: 10.5pt;">导出某一个</span><span style="font-size: 10.5pt;">SCHEMA</span><span style="font-size: 10.5pt;">下的所有数据</span></p>
+<p align="left"><span style="font-size: 10.5pt;">TABLES:</span><span style="font-size: 10.5pt;">按表导出</span><span style="font-size: 10.5pt;">(</span><span style="font-size: 10.5pt;">这里的方法和</span><span style="font-size: 10.5pt;">EXP</span><span style="font-size: 10.5pt;">一样</span><span style="font-size: 10.5pt;">)</span></p>
+<p align="left"><span style="font-size: 10.5pt;">TABLESPACE:</span><span style="font-size: 10.5pt;">指定一个表空间导出</span><span style="font-size: 10.5pt;">.</span></p>
+<p align="left"><span style="font-size: 10.5pt;">QUERY:</span><span style="font-size: 10.5pt;">按表导出时</span><span style="font-size: 10.5pt;">,</span><span style="font-size: 10.5pt;">使用条件语句限定导出范围</span><span style="font-size: 10.5pt;">(</span><span style="font-size: 10.5pt;">同</span><span style="font-size: 10.5pt;">exp</span><span style="font-size: 10.5pt;">中的</span><span style="font-size: 10.5pt;">QUERY) </span></p>
+
+<div style="text-indent: 18pt; text-align: left;"><span style="font-size: 10.5pt;"><hr style="width: 146.05pt;" size="2" /></span></div>
+<p align="left"><span style="font-size: 10.5pt;">TRANSPORT_FULL_CHECK:</span></p>
+<p align="left"><span style="font-size: 10.5pt;">TRANSPORT_TABLESPACES:</span></p>
+
+<div style="text-indent: 21pt; text-align: left;"><span style="font-size: 10.5pt;"><hr style="width: 146.05pt;" size="2" /></span></div>
+<p align="left"><span style="font-size: 10.5pt;">FLASHBACK_SCN:</span></p>
+<p align="left"><span style="font-size: 10.5pt;">FLASHBACK_TIME:</span></p>
+<p align="left"><span style="font-size: 10.5pt;">PARALLEL:</span><span style="font-size: 10.5pt;">并行操作</span></p>
+<p align="left"><span style="font-size: 10.5pt;">PARFILE:</span></p>
+<p align="left"><span style="font-size: 10.5pt;">NETWORK_LINK:</span></p>
+
+<div style="text-indent: 21pt; text-align: left;"><span style="font-size: 10.5pt;"><hr style="width: 146.05pt;" size="2" /></span></div>
+<p align="left"><strong><span style="font-size: 12pt;">3.</span></strong><span style="font-size: 7pt;"> </span><strong><span style="font-size: 12pt;">导出过程中的监控</span></strong></p>
+<p align="left"><span style="font-size: 12pt;">当</span><span style="font-size: 12pt;"> Data Pump Export (DPE) </span><span style="font-size: 12pt;">运行时，按</span><span style="font-size: 12pt;"> Control-C</span><span style="font-size: 12pt;">；它将阻止消息在屏幕上显示，但不停止导出进程本身。相反，它将显示</span><span style="font-size: 12pt;"> DPE </span><span style="font-size: 12pt;">提示符（如下所示）。进程现在被认为处于</span><span style="font-size: 12pt;">“</span><span style="font-size: 12pt;">交互式</span><span style="font-size: 12pt;">”</span><span style="font-size: 12pt;">模式：</span></p>
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; line-height: 130%; text-align: left;" align="left"><span>Export&gt;</span></p>
+<p align="left"><span style="font-size: 12pt;">这种方法允许在这个</span><span style="font-size: 12pt;"> DPE </span><span style="font-size: 12pt;">作业上输入命令查询及控制当前作业。</span></p>
+<p align="left"><strong><span style="font-size: 12pt;">4.</span></strong><span style="font-size: 7pt;"> </span><strong><span style="font-size: 12pt;">并行操作</span></strong><strong><span style="font-size: 12pt;">(</span></strong><strong><span style="font-size: 12pt;">PARALLEL)</span></strong></p>
+<p align="left"><span style="font-size: 12pt;">您可以通过</span><span style="font-size: 12pt;"> PARALLEL </span><span style="font-size: 12pt;">参数为导出使用一个以上的线程来显著地加速作业。每个线程创建一个单独的转储文件，因此参数</span><span style="font-size: 12pt;"> dumpfile </span><span style="font-size: 12pt;">应当拥有和并行度一样多的项目。您可以指定通配符作为文件名，而不是显式地输入各个文件名，例如：</span><span style="font-size: 12pt;"> </span></p>
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; line-height: 130%; text-align: left;" align="left"><span>expdp ananda/abc123 tables=CASES directory=DPDATA1 dumpfile=expCASES_%U.dmp parallel=4 job_name=Cases_Export</span></p>
+<p align="left"><strong><span style="font-size: 12pt; color: red;">注意</span></strong><strong><span style="font-size: 12pt; color: red;">:</span></strong><span style="font-size: 12pt;">dumpfile </span><span style="font-size: 12pt;">参数拥有一个通配符</span><span style="font-size: 12pt;"> %U</span><span style="font-size: 12pt;">，它指示文件将按需要创建，格式将为</span><span style="font-size: 12pt;">expCASES_nn.dmp</span><span style="font-size: 12pt;">，其中</span><span style="font-size: 12pt;">nn </span><span style="font-size: 12pt;">从</span><span style="font-size: 12pt;"> 01 </span><span style="font-size: 12pt;">开始，然后按需要向上增加。</span></p>
+<p align="left"><span style="font-size: 12pt;">在并行模式下，状态屏幕将显示四个工作进程。（在默认模式下，只有一个进程是可见的）所有的工作进程同步取出数据，并在状态屏幕上显示它们的进度。</span><span style="font-size: 12pt;"> </span></p>
+<p align="left"><span style="font-size: 12pt;">分离访问数据文件和转储目录文件系统的输入</span><span style="font-size: 12pt;">/</span><span style="font-size: 12pt;">输出通道是很重要的。否则，与维护</span><span style="font-size: 12pt;"> Data Pump </span><span style="font-size: 12pt;">作业相关的开销可能超过并行线程的效益，并因此而降低性能。并行方式只有在表的数量多于并行值并且表很大时才是有效的。</span></p>
+<p align="left"><strong><span style="font-size: 12pt;">5.</span></strong><span style="font-size: 7pt;"> </span><strong><span style="font-size: 12pt;">数据库监控</span></strong><strong><span style="font-size: 12pt;"> </span></strong></p>
+<p align="left"><span style="font-size: 12pt;">您还可以从数据库视图获得关于运行的</span><span style="font-size: 12pt;"> Data Pump </span><span style="font-size: 12pt;">作业的更多信息。监控作业的主视图是</span><span style="font-size: 12pt;"> DBA_DATAPUMP_JOBS</span><span style="font-size: 12pt;">，它将告诉您在作业上有多少个工作进程（列</span><span style="font-size: 12pt;"> DEGREE</span><span style="font-size: 12pt;">）在工作。</span></p>
+<p align="left"><span style="font-size: 12pt;">另一个重要的视图是</span><span style="font-size: 12pt;"> DBA_DATAPUMP_SESSIONS</span><span style="font-size: 12pt;">，当它与上述视图和</span><span style="font-size: 12pt;"> V$SESSION </span><span style="font-size: 12pt;">结合时将给出主前台进程的会话</span><span style="font-size: 12pt;"> SID</span><span style="font-size: 12pt;">。</span><span style="font-size: 12pt;"> </span></p>
+
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; text-indent: 0.15pt; line-height: 130%; text-align: left;" align="left"><span>select sid, serial#
+from v$session s, dba_datapump_sessions d
+where s.saddr = d.saddr;</span>
+<p align="left"><span style="font-size: 12pt;">这条指令显示前台进程的会话。更多有用的信息可以从警报日志中获得。当进程启动时，</span><span style="font-size: 12pt;">MCP </span><span style="font-size: 12pt;">和工作进程在警报日志中显示如下：</span><span style="font-size: 12pt;"> </span></p>
+
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; text-indent: 0.15pt; line-height: 130%; text-align: left;" align="left"><span>kupprdp:master process DM00 started with pid=23, OS id=20530 to execute -
+SYS.KUPM$MCP.MAIN('CASES_EXPORT', 'ANANDA');
+kupprdp:worker process DW01 started with worker id=1, pid=24, OS id=20532 to execute -
+SYS.KUPW$WORKER.MAIN('CASES_EXPORT', 'ANANDA');
+kupprdp:worker process DW03 started with worker id=2, pid=25, OS id=20534 to execute -
+SYS.KUPW$WORKER.MAIN('CASES_EXPORT', 'ANANDA');</span>
+<p align="left"><span style="font-size: 12pt;">它显示为数据泵操作启动的会话的</span><span style="font-size: 12pt;"> PID</span><span style="font-size: 12pt;">。您可以用以下查询找到实际的</span><span style="font-size: 12pt;"> SID</span><span style="font-size: 12pt;">：</span><span style="font-size: 12pt;"> </span></p>
+
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; text-indent: 0.15pt; line-height: 130%; text-align: left;" align="left"><span>select sid, program from v$session where paddr in
+(select addr from v$process where pid in (23,24,25));</span>
+<p align="left"><span style="font-size: 12pt;">PROGRAM </span><span style="font-size: 12pt;">列将对应警报日志文件中的名称显示进程</span><span style="font-size: 12pt;"> DM </span><span style="font-size: 12pt;">（为主进程）或</span><span style="font-size: 12pt;"> DW </span><span style="font-size: 12pt;">（为工作进程）。如果一个工作进程使用了并行查询，比如说</span><span style="font-size: 12pt;"> SID 23</span><span style="font-size: 12pt;">，您可以在视图</span><span style="font-size: 12pt;"> V$PX_SESSION </span><span style="font-size: 12pt;">中看到它，并把它找出来。它将为您显示从</span><span style="font-size: 12pt;"> SID 23 </span><span style="font-size: 12pt;">代表的工作进程中运行的所有并行查询会话：</span><span style="font-size: 12pt;"> </span></p>
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; text-indent: 0.15pt; line-height: 130%; text-align: left;" align="left"><span>select sid from v$px_session where qcsid = 23;</span></p>
+<p align="left"><span style="font-size: 12pt;">从视图</span><span style="font-size: 12pt;"> V$SESSION_LONGOPS </span><span style="font-size: 12pt;">中可以获得其它的有用信息来预测完成作业将花费的时间。</span><span style="font-size: 12pt;"> </span></p>
+
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; text-indent: 0.15pt; line-height: 130%; text-align: left;" align="left"><span>select sid, serial#, sofar, totalwork
+from v$session_longops
+where opname = 'CASES_EXPORT'
+and sofar != totalwork;</span>
+<p align="left"><span style="font-size: 12pt;">列</span><span style="font-size: 12pt;"> totalwork </span><span style="font-size: 12pt;">显示总工作量，该列的</span><span style="font-size: 12pt;"> sofar </span><span style="font-size: 12pt;">数量被加和到当前的时刻</span><span style="font-size: 12pt;"> — </span><span style="font-size: 12pt;">因而您可以用它来估计还要花多长时间。</span></p>
+<p align="left"><strong><span style="font-size: 12pt;">6.</span></strong><span style="font-size: 12pt;"> </span><strong><span style="font-size: 12pt;">处理特定对象</span></strong><strong><span style="font-size: 12pt;"> </span></strong></p>
+<p style="text-indent: -21pt; text-align: left;" align="left"><span style="font-size: 12pt;">l</span><span style="font-size: 7pt;"> </span><span style="font-size: 12pt;">Data Pump </span><span style="font-size: 12pt;">允许您只导出特定类型的对象。</span></p>
+<p style="text-align: left;" align="left"><span style="font-size: 12pt;">例如，以下命令只导出过程，而不导出其它任何东西</span><span style="font-size: 12pt;">(</span><span style="font-size: 12pt;">不导出表、视图、甚至函数</span><span style="font-size: 12pt;">)</span><span style="font-size: 12pt;">：</span><span style="font-size: 12pt;"> </span></p>
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; line-height: 130%; text-align: left;" align="left"><span>expdp scott/tiger directory=dmpdir dumpfile=procedure.dmp include=PROCEDURE</span></p>
+<p style="text-indent: -21pt; text-align: left;" align="left"><span style="font-size: 12pt;">l</span><span style="font-size: 7pt;"> </span><span style="font-size: 12pt;">要只导出一些特定的对象</span><span style="font-size: 12pt;">(</span><span style="font-size: 12pt;">比如说，函数</span><span style="font-size: 12pt;"> FUNC1 </span><span style="font-size: 12pt;">和过程</span><span style="font-size: 12pt;"> PROC1)</span></p>
+
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; line-height: 130%; text-align: left;" align="left"><span>expdp scott/tiger directory=dmpdir dumpfile=test.dmp
+include=PROCEDURE:\"=\'PROC1\'\",FUNCTION:\"=\'FUNC1\'\"</span>
+<p style="text-indent: -21pt; text-align: left;" align="left"><span style="font-size: 12pt;">l</span><span style="font-size: 7pt;"> </span><span style="font-size: 12pt;">可以用导出的</span><span style="font-size: 12pt;">dmp</span><span style="font-size: 12pt;">文件来创建</span><span style="font-size: 12pt;">dmp</span><span style="font-size: 12pt;">文件中包含对象的</span><span style="font-size: 12pt;"> DDL </span><span style="font-size: 12pt;">脚本，以供之后使用。</span></p>
+<p align="left"><span style="font-size: 12pt;">一个称为</span><span style="font-size: 12pt;"> SQLFILE(impdp</span><span style="font-size: 12pt;">参数</span><span style="font-size: 12pt;">)</span><span style="font-size: 12pt;">参数允许创建</span><span style="font-size: 12pt;"> DDL </span><span style="font-size: 12pt;">脚本文件。</span><span style="font-size: 12pt;"> </span></p>
+<p style="background: #d9d9d9 none repeat scroll 0% 50%; line-height: 130%; text-align: left;" align="left"><span style="color: red;">impdp scott/tiger DIRECTORY=dmpdir DUMPFILE=expprocs.dmp SQLFILE=aa.sql</span></p>
+
+<span style="font-size: 12pt; color: red;">使用这种方法的</span><span style="font-size: 12pt; color: red;">impdp,</span><span style="font-size: 12pt; color: red;">可以从</span><span style="font-size: 12pt; color: red;">dp</span><span style="font-size: 12pt; color: red;">出来的</span><span style="font-size: 12pt; color: red;">dmp</span><span style="font-size: 12pt; color: red;">文件中提取对象的</span><span style="font-size: 12pt; color: red;">DDL</span><span style="font-size: 12pt; color: red;">语句</span><span style="font-size: 12pt; color: red;">,</span><span style="font-size: 12pt; color: red;">这样的</span><span style="font-size: 12pt; color: red;">impdp</span><span style="font-size: 12pt; color: red;">并不把数据导入数据库中</span><span style="font-size: 12pt; color: red;">,</span><span style="font-size: 12pt; color: red;">只是创建</span><span style="font-size: 12pt; color: red;">DDL</span><span style="font-size: 12pt; color: red;">语句文件
+
+<span style="color: #000000;">转自：<a href="http://xingxingwx.javaeye.com/blog/131169" target="_blank">http://xingxingwx.javaeye.com/blog/131169</a></span></span>
+</pre>

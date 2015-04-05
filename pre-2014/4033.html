@@ -1,0 +1,32 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>date</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">date</font>
+<br>
+
+<font size="2">2008-01-25 16:23:56</font>
+<p>
+<pre>
+在terminal里，可以用var=$(command)或者var=`command`的方法把command对输出复制给var。
+例如有时候需要把系统当前的时间储存在一个变量里，后面的脚本要用到这个时间。那么，就可以
+DATE=$(date)
+这样之后用$DATE就能取出之前保存的这个时间。
+
+不过，date的默认输出是这样的Fri Jan 25 16:20:43 CST 2008，很多时候，我们需要根据需求格式化时间，还好，date自带了格式化时间的参数，只要date +format，format用自己要多格式替换就行了。例如date +%Y%m%d，就会输出20080125，其他的格式man date就能看到了。
+
+然后，把格式化后的时间储存在一个变量里DATE=$(date +%Y%m%d)。
+</pre>

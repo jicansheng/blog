@@ -1,0 +1,37 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>nautilus-script</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">nautilus-script</font>
+<br>
+
+<font size="2">2009-01-20 23:58:17</font>
+<p>
+<pre>
+可以在~/.gnome2/nautilus-scripts文件夹中存放一些脚本，这样在nautilus的右键菜单中就能直接使用这些脚本。
+在脚本中，$1代表的是选中的单个文件的文件名，对于多个文件，没试过。下面是这样nautilus设置的一些变量：
+
+All executable files in this folder will appear in the Scripts menu. Choosing a script from the menu will run that script.
+
+When executed from a local folder, scripts will be passed the selected file names. When executed from a remote folder (e.g. a folder showing web or ftp content), scripts will be passed no parameters.
+
+In all cases, the following environment variables will be set by Nautilus, which the scripts may use:
+
+NAUTILUS_SCRIPT_SELECTED_FILE_PATHS: newline-delimited paths for selected files (only if local)
+NAUTILUS_SCRIPT_SELECTED_URIS: newline-delimited URIs for selected files
+NAUTILUS_SCRIPT_CURRENT_URI: URI for current location
+NAUTILUS_SCRIPT_WINDOW_GEOMETRY: position and size of current window
+</pre>

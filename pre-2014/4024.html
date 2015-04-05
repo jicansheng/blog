@@ -1,0 +1,39 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>今天把oracle从10.1.0.3升级到10.2.0.4了</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">今天把oracle从10.1.0.3升级到10.2.0.4了</font>
+<br>
+
+<font size="2">2008-07-25 03:40:51</font>
+<p>
+<pre>
+　　原来的版本在多次dmp、或dmpdp后，就会在dump的时候出错，虽然数据库服务器还能正常使用，但之后无法dump，无法shutdown immediate，只能shutdown abort之后再dump，这是就不会出错了。
+
+　　在网上搜了很久，都没有解决的方案，有不少人说那是10.1的bug升级到10.2.0.3就好了。于是一直想把数据库升级到10.2.0.4。
+
+　　没找到10.2.0.4的安装文件，只有10.2.0.4的patch，down下来后，看了里面的文档，requirement里居然写着只能给10.2.0.1及以后的版本打补丁，没办法，只能再去找10.2.0.1的安装文件。
+
+　　没有升级的经验，所以下午现在虚拟机上折腾了半天，觉得大概没问题了，就等着晚上访问量少的时候升级数据库。
+
+　　整个升级的过程还是很麻烦的，首先要把原来的版本里的文件删掉，主要是$ORACLE_HOME目录、/etc/ora*（2文件1目录）与/usr /local/bin/里的3个文件。装10.2.0.1，不要创建实例，否则升级到10.2.0.4还得升级实例。打10.2.0.4的补丁，然后用$ORACLE_HOME/bin/dbca创建数据库实例。
+
+　　安装、打补丁都是运行相应目录里的runInstaller，都是图形化界面的，注意看提示就可以了。
+
+　　最心烦的是dbca创建实例的速度特别慢。
+
+　　但愿升级之后不会再dump出错了。
+</pre>

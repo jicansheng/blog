@@ -1,0 +1,42 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>struts不支持标签的嵌套？</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">struts不支持标签的嵌套？</font>
+<br>
+
+<font size="2">2008-10-13 20:16:51</font>
+<p>
+<pre>
+<br>其實struts標簽是不能夠嵌套的；
+
+<br><font color="#ff6600">例一</font>：&lt;logic:iterate &nbsp; id=&quot;cl&quot; &nbsp; name=&quot;Ids&quot;&gt; &nbsp; //循环取得id&nbsp;&nbsp; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;//比较beanname中的id是否和cl中的id相同，如果相同就显示cl中的name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;logic:equal &nbsp; name=&quot;beanname&quot; &nbsp; property=&quot;id&quot; &nbsp; <font color="#ff0000">value=&quot;&lt;bean:write &nbsp; name=&quot;cl&quot; &nbsp; property=&quot;id&quot;/&gt;&quot;<font color="#000000">&gt;&nbsp;&nbsp;</font>&nbsp;&nbsp;&nbsp;&nbsp;</font><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;bean:write &nbsp; name=&quot;cl&quot; &nbsp; property=&quot;name&quot;/&gt; &nbsp; <br />&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/logic:equal&gt; &nbsp; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/logic:iterate&gt;&nbsp;&nbsp;
+
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 紅色文字區就是錯誤的嵌套了，這樣是得不到想要的結果的，可改爲
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;logic:iterate &nbsp; id=&quot;cl&quot; &nbsp; name=&quot;Ids&quot;&gt; &nbsp; //循环取得id &nbsp; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&lt;bean:define &nbsp; id=&quot;temId&quot; &nbsp; name=&quot;cl&quot; &nbsp; property=&quot;id&quot; &nbsp; type=&quot;java.lang.String&quot;/&gt; &nbsp; 
+
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //比较beanname中的id是否和cl中的id相同，如果相同就显示cl中的name<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;logic:equal &nbsp; name=&quot;beanname&quot; &nbsp; property=&quot;id&quot; &nbsp; value=&quot;&lt;%=temId%&gt;&quot;&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;bean:write &nbsp; name=&quot;cl&quot; &nbsp; property=&quot;name&quot;/&gt; &nbsp; <br />&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/logic:equal&gt; &nbsp; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/logic:iterate&gt;&nbsp;&nbsp; 
+
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 這樣先定義，后使用，就ok了。
+<br><font color="#ff6600">例二</font>：&lt;html:submit &nbsp; value=&quot;&lt;bean:message &nbsp; key=&quot;welcome.login&quot; &nbsp; bundle=&quot;base&quot;/&gt;&quot;/&gt; 
+
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 應該為
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;html:submit&gt; &nbsp; <br />&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;bean:message &nbsp; key &nbsp; &nbsp; = &nbsp; &quot;welcome.logon&quot; &nbsp; bundle &nbsp; = &nbsp; &quot;base&quot;/&gt; &nbsp; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/html:submit&gt;
+
+&nbsp;<p>转：<a href="http://blog.csdn.net/lizarbhc/archive/2007/05/06/1598219.aspx" Title = "permalink">http://blog.csdn.net/lizarbhc/archive/2007/05/06/1598219.aspx</a>
+</pre>

@@ -1,0 +1,52 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>如何修改Oracle数据库的连接数</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">如何修改Oracle数据库的连接数</font>
+<br>
+
+<font size="2">2008-02-18 11:52:23</font>
+<p>
+<pre>
+1. 查看processes和sessions参数
+<blockquote>SQL> show parameter processes
+NAME                                  TYPE         VALUE
+db_writer_processes                  integer     1
+gcs_server_processes                 integer     0
+job_queue_processes                  integer     10
+log_archive_max_processes            integer     2
+processes                            integer     50
+SQL> show parameter sessions
+NAME                                  TYPE         VALUE
+license_max_sessions                 integer     0
+license_sessions_warning             integer     0
+logmnr_max_persistent_sessions       integer     1
+sessions                             integer     60
+shared_server_sessions               integer</blockquote>
+
+2. 修改processes和sessions值
+<blockquote>SQL> alter system set processes=300 scope=spfile;
+系统已更改。
+SQL> alter system set sessions=335 scope=spfile;
+系统已更改。</blockquote>
+
+3. 修改processes和sessions值必须重启oracle服务器才能生效
+    ORACLE的连接数(sessions)与其参数文件中的进程数(process)有关，它们的关系如下：
+    sessions=(1.1*process+5)
+
+
+参考文章：http://blog.csdn.net/wudi_1982/archive/2007/06/08/1643610.aspx
+</pre>
