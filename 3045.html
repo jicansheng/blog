@@ -1,0 +1,39 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>HOWTO: Install Flash 9 on Ubuntu Gutsy Gibbon 64-bit</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">HOWTO: Install Flash 9 on Ubuntu Gutsy Gibbon 64-bit</font>
+<br>
+
+<font size="2">2008-01-27 21:01:50</font>
+<p>
+<pre>
+在64位Ubuntu 7.10 里，直接在Synaptic里装flashplugin-nonfree，装完了firefox里还是提示要装插件，再选flashplugin-nonfree，提示已安装。选择Finish，很快又提示需要安装flash插件。
+
+看到一篇文章，说怎样安装的，关键步骤如下：
+
+wget http://fpdownload.macromedia.com/get/flashplayer/current/install_flash_player_9_linux.tar.gz
+
+tar -xvzf ./install_flash_player_9_linux.tar.gz
+
+mkdir ~/.mozilla/plugins
+
+cp install_flash_player_9_linux/libflashplayer.so ~/.mozilla/plugins
+
+sudo aptitude install nspluginwrapper
+
+nspluginwrapper -i ~/.mozilla/plugins/libflashplayer.so
+</pre>

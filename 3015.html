@@ -1,0 +1,81 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>cvs 创建用户</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">cvs 创建用户</font>
+<br>
+
+<font size="2">2008-09-29 14:19:40</font>
+<p>
+<pre>
+CVS添加用户的过程
+D:\cvs\CVSROOT&gt;set cvsroot=:pserver:administrator@127.0.0.1:/cvs
+
+D:\cvs\CVSROOT&gt;cvs login
+Logging in to :pserver:administrator@127.0.0.1:2401:/cvs
+CVS Password:
+
+D:\cvs\CVSROOT&gt;cvs passwd <strong>-r administrator </strong>-a lrj
+Adding user lrj@127.0.0.1
+New Password:
+Verify Password:
+
+cvs可供使用的命令
+CVS commands are:
+add          Add a new file/directory to the repository
+admin        Administration front end for rcs
+annotate     Show last revision where each line was modified
+chacl        Change the Access Control List for a directory
+checkout     Checkout sources for editing
+chown        Change the owner of a directory
+commit       Check files into the repository
+diff         Show differences between revisions
+edit         Get ready to edit a watched file
+editors      See who is editing a watched file
+export       Export sources from CVS, similar to checkout
+history      Show repository access history
+import       Import sources into CVS, using vendor branches
+init         Create a CVS repository if it doesn't exist
+info         Display information about supported protocols
+log          Print out history information for files
+login        Prompt for password for authenticating server
+logout       Removes entry in .cvspass for remote repository
+ls           List files in the repository
+lsacl        List the directories Access Control List
+passwd       Set the user's password (Admin: Administer users)
+authserver   Authentication server mode
+rannotate    Show last revision where each line of module was modified
+rdiff        Create 'patch' format diffs between releases
+release      Indicate that a Module is no longer in use
+remove       Remove an entry from the repository
+rename       Rename a file or directory
+rchacl       Change the Access Control List for a directory
+rchown       Change the owner of a directory
+rlsacl       List the directories Access Control List
+rlog         Print out history information for a module
+rtag         Add a symbolic tag to a module
+server       Server mode
+status       Display status information on checked out files
+tag          Add a symbolic tag to checked out version of files
+unedit       Undo an edit command
+update       Bring work tree in sync with repository
+version      Show current CVS version(s)
+watch        Set watches
+watchers     See who is watching a file
+xdiff        Show differences between revisions using an external diff p
+rogram
+(Specify the --help option for a list of other help options)
+</pre>

@@ -1,0 +1,42 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>把ftp mount到本地目录</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">把ftp mount到本地目录</font>
+<br>
+
+<font size="2">2009-01-20 23:56:48</font>
+<p>
+<pre>
+感觉用起来还是蛮方便的，但是有些ftp有只能一个连接的限制，这是如果直接对上面的文件进行编辑的话，有可能会使nautilus没有响应。还是sshfs比较好，感觉稳定性上比curlftpfs好不少。
+
+CurlFtpFS uses typical FTP syntax:
+# curlftpfs ftp://ftp.gentoo.org/ /path/to/mountpoint
+
+To unmount an ftp host:
+# fusermount -u /path/to/mountpoint/
+
+/etc/fstab line:
+curlftpfs#user:password@server.tld/remote/path /mount/point fuse user,disable_eprt,noauto
+
+More Information on CurlFtpFS
+Additional options:
+* User and password : ftp://user:password@ftp.gentoo.org/
+* Specific port : ftp://ftp.gentoo.org:8585
+
+For more information, see the man page:
+from：http://gentoo-wiki.com/HOWTO_FTP_Mount
+</pre>

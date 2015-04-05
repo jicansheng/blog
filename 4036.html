@@ -1,0 +1,146 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>转：Mysql日期和时间函数不求人</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">转：Mysql日期和时间函数不求人</font>
+<br>
+
+<font size="2">2008-01-17 19:17:05</font>
+<p>
+<pre>
+DATE_FORMAT(date,format)
+根据format字符串格式化date值。下列修饰符可以被用在format字符串中： %M 月名字(January……December)
+%W 星期名字(Sunday……Saturday)
+%D 有英语前缀的月份的日期(1st, 2nd, 3rd, 等等。）
+%Y 年, 数字, 4 位
+%y 年, 数字, 2 位
+%a 缩写的星期名字(Sun……Sat)
+%d 月份中的天数, 数字(00……31)
+%e 月份中的天数, 数字(0……31)
+%m 月, 数字(01……12)
+%c 月, 数字(1……12)
+%b 缩写的月份名字(Jan……Dec)
+%j 一年中的天数(001……366)
+%H 小时(00……23)
+%k 小时(0……23)
+%h 小时(01……12)
+%I 小时(01……12)
+%l 小时(1……12)
+%i 分钟, 数字(00……59)
+%r 时间,12 小时(hh:mm:ss [AP]M)
+%T 时间,24 小时(hh:mm:ss)
+%S 秒(00……59)
+%s 秒(00……59)
+%p AM或PM
+%w 一个星期中的天数(0=Sunday ……6=Saturday ）
+%U 星期(0……52), 这里星期天是星期的第一天
+%u 星期(0……52), 这里星期一是星期的第一天
+%% 一个文字“%”。
+
+所有的其他字符不做解释被复制到结果中。
+
+mysql> select DATE_FORMAT(‘1997–10-04 22:23:00‘, ‘%W %M %Y‘);
+-> ‘Saturday October 1997‘
+mysql> select DATE_FORMAT(‘1997–10-04 22:23:00‘, ‘%H:%i:%s‘);
+-> ‘22:23:00‘
+mysql> select DATE_FORMAT(‘1997–10-04 22:23:00‘,
+‘%D %y %a %d %m %b %j‘);
+-> ‘4th 97 Sat 04 10 Oct 277‘
+mysql> select DATE_FORMAT(‘1997–10-04 22:23:00‘,
+‘%H %k %I %r %T %S %w‘);
+-> ‘22 22 10 10:23:00 PM 22:23:00 00 6‘
+MySQL3.23中，在格式修饰符字符前需要%。在MySQL更早的版本中，%是可选的。
+
+TIME_FORMAT(time,format)
+这象上面的DATE_FORMAT()函数一样使用，但是format字符串只能包含处理小时、分钟和秒的那些格式修饰符。
+
+其他修饰符产生一个NULL值或0。
+CURDATE()
+
+
+CURRENT_DATE
+以‘YYYY-MM-DD‘或YYYYMMDD格式返回今天日期值，取决于函数是在一个字符串还是数字上下文被使用。
+mysql> select CURDATE();
+> '199712–15‘
+mysql> select CURDATE() + 0;
+-> 19971215
+
+CURTIME()
+
+
+CURRENT_TIME
+以‘HH:MM:SS‘或HHMMSS格式返回当前时间值，取决于函数是在一个字符串还是在数字的上下文被使用。
+mysql> select CURTIME();
+-> ‘23:50:26‘
+mysql> select CURTIME() + 0;
+-> 235026
+
+NOW()
+
+
+SYSDATE()
+
+
+CURRENT_TIMESTAMP
+以‘YYYY-MM-DD HH:MM:SS‘或YYYYMMDDHHMMSS格式返回当前的日期和时间，取决于函数是在一个字符串还是在数字的
+上下文被使用。
+mysql> select NOW();
+> '199712–15 23:50:26‘
+mysql> select NOW() + 0;
+-> 19971215235026
+
+UNIX_TIMESTAMP()
+
+
+UNIX_TIMESTAMP(date)
+如果没有参数调用，返回一个Unix时间戳记(从‘1970–01-01 00:00:00‘GMT开始的秒数)。如果UNIX_TIMESTAMP()用一个date参数被调用，它返回从‘1970–01-01 00:00:00‘ GMT开始的秒数值。date可以是一个DATE字符串、一个DATETIME字符串、一个TIMESTAMP或以YYMMDD或YYYYMMDD格式的本地时间的一个数字。
+mysql> select UNIX_TIMESTAMP();
+-> 882226357
+mysql> select UNIX_TIMESTAMP(‘1997–10-04 22:23:00‘);
+-> 875996580
+
+当UNIX_TIMESTAMP被用于一个TIMESTAMP列，函数将直接接受值，没有隐含的“string-to-unix-timestamp”变换 www.knowsky.com。
+
+FROM_UNIXTIME(unix_timestamp)
+以‘YYYY-MM-DD HH:MM:SS‘或YYYYMMDDHHMMSS格式返回unix_timestamp参数所表示的值，取决于函数是在一个字符串还是或数字上下文中被使用。
+mysql> select FROM_UNIXTIME(875996580);
+> '199710–04 22:23:00‘
+mysql> select FROM_UNIXTIME(875996580) + 0;
+-> 19971004222300
+
+FROM_UNIXTIME(unix_timestamp,format)
+返回表示 Unix 时间标记的一个字符串，根据format字符串格式化。format可以包含与DATE_FORMAT()函数列出的条目同样的修饰符。
+mysql> select FROM_UNIXTIME(UNIX_TIMESTAMP(),
+‘%Y %D %M %h:%i:%s %x‘);
+-> ‘1997 23rd December 03:43:30 x‘
+
+SEC_TO_TIME(seconds)
+返回seconds参数，变换成小时、分钟和秒，值以‘HH:MM:SS‘或HHMMSS格式化，取决于函数是在一个字符串还是在数字上下文中被使用。
+mysql> select SEC_TO_TIME(2378);
+-> ‘00:39:38‘
+mysql> select SEC_TO_TIME(2378) + 0;
+-> 3938
+
+TIME_TO_SEC(time)
+返回time参数，转换成秒。
+mysql> select TIME_TO_SEC(‘22:23:00‘);
+-> 80580
+mysql> select TIME_TO_SEC(‘00:39:38‘);
+-> 2378
+
+
+（转自：http://blog.51766.com/comments/zsc/Weblog/1150964964770）
+</pre>
