@@ -1,0 +1,30 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>vim tricks</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">vim tricks</font>
+<br>
+
+<font size="2">2009-02-03 15:11:52</font>
+<p>
+<pre>
+<p>1. ctrl-v 就是一般编辑器里粘贴的快捷键</p>
+<p>这个的做用来打一些特殊字符，例如， ctrl-v 然后按回车，会打出一个特殊的字符，这个字符就表示&ldquo;回车&rdquo;的编码，而不是在编辑器里换一行。用这种办法还能打出Esc，Delete等键对应的字符。</p>
+<p>2. map</p>
+<p>这个可就神奇了。很多IDE的编译的快捷键是F5, 想在vim里也能这样，用map定义快捷键即可。</p>
+<p>在普通模式下按 :map &lt;F5&gt; :make ctrl-v&lt;Enter&gt;（&lt;F5&gt;、&lt;Enter&gt;分别表示按那两个键）。</p>
+<p>这样，下次按F5就会自动make了。当然可以根据需要换成ant或是别的。写到.vimrc里就更爽了。</p>
+</pre>

@@ -1,0 +1,62 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>谁能告诉我下面的PreparedStatement的用法哪错了</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">谁能告诉我下面的PreparedStatement的用法哪错了</font>
+<br>
+
+<font size="2">2009-01-21 00:07:52</font>
+<p>
+<pre>
+java.sql.PreparedStatement ps = conn.prepareStatement(
+“insert into JUDGE(” +
+“rid,record_date,school_name,department,” +
+“return_date,content,major,number,” +
+“administrator,bz)” +
+“select * from ” +
+” (select max(i)+1 from (select max(rid) from judge union values(0) ) t(i)) t1(rid),\n” +
+” (values( ? ,\n’school1′,’depart1′,’1998-04-02 00:00:00′,’content’,'mj’,'no.123′,’admin’,'bz’)) t2″ );
+ps.setTimestamp(1, new java.sql.Timestamp(record.getRecordDate().getTime()));
+ps.execute();
+
+执行上面的语句时提示出错，出错的地方是conn.prepareStatement…这一句，把？改成’2008-08-05 22:36:00′就没错了，也能正常添加到数据库中，下面是异常信息：
+
+java.sql.SQLException: DERBY SQL error: SQLCODE: -1, SQLSTATE: XJ001, SQLERRMC: java.lang.NullPointerException XJ001.U
+at org.apache.derby.client.am.SQLExceptionFactory40.getSQLException(Unknown Source)
+at org.apache.derby.client.am.SqlException.getSQLException(Unknown Source)
+at org.apache.derby.client.am.Connection.prepareStatement(Unknown Source)
+at cn.edu.myschool.degree.logic.Database.insert2(Database.java:59)
+at cn.edu.myschool.degree.logic.Database.main(Database.java:97)
+Caused by: org.apache.derby.client.am.SqlException: DERBY SQL error: SQLCODE: -1, SQLSTATE: XJ001, SQLERRMC: java.lang.NullPointerException XJ001.U
+at org.apache.derby.client.am.Statement.completeSqlca(Unknown Source)
+at org.apache.derby.client.net.NetStatementReply.parsePrepareError(Unknown Source)
+at org.apache.derby.client.net.NetStatementReply.parsePRPSQLSTTreply(Unknown Source)
+at org.apache.derby.client.net.NetStatementReply.readPrepareDescribeOutput(Unknown Source)
+at org.apache.derby.client.net.StatementReply.readPrepareDescribeOutput(Unknown Source)
+at org.apache.derby.client.net.NetStatement.readPrepareDescribeOutput_(Unknown Source)
+at org.apache.derby.client.am.Statement.readPrepareDescribeOutput(Unknown Source)
+at org.apache.derby.client.am.PreparedStatement.readPrepareDescribeInputOutput(Unknown Source)
+at org.apache.derby.client.am.PreparedStatement.flowPrepareDescribeInputOutput(Unknown Source)
+at org.apache.derby.client.am.PreparedStatement.prepare(Unknown Source)
+at org.apache.derby.client.am.Connection.prepareStatementX(Unknown Source)
+… 3 more
+
+后来改成statement，然后用StringBuffer生成一个对应的复杂的sql语句，执行时也没错。
+太奇怪了，难道PreparedStatement不支持复杂的语句？
+注：运行环境是derby-10.3.2.1。
+
+后续： 2009-01-29，用derby-10.4.2.0试了一下，还是相同的错误。
+</pre>

@@ -1,0 +1,125 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>转：MySQL 常用命令</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">转：MySQL 常用命令</font>
+<br>
+
+<font size="2">2009-03-13 00:17:00</font>
+<p>
+<pre>
+<p>转自：<a href="http://www.unix-center.net/bbs/viewthread.php?tid=10555&amp;extra=page%3D1">http://www.unix-center.net/bbs/viewthread.php?tid=10555&amp;extra=page%3D1</a><br />
+&nbsp;</p>
+<div class="t_msgfont" id="message85000">1、MySQL常用命令 <br />
+<br />
+create database name; 创建数据库 <br />
+<br />
+use databasename; 选择数据库 <br />
+<br />
+drop database name 直接删除数据库，不提醒 <br />
+<br />
+show tables; 显示表 <br />
+<br />
+describe tablename; 表的详细描述 <br />
+<br />
+select 中加上distinct去除重复字段 <br />
+<br />
+mysqladmin drop databasename 删除数据库前，有提示。 <br />
+<br />
+显示当前mysql版本和当前日期 <br />
+<br />
+select version(),current_date; <br />
+<br />
+2、修改mysql中root的密码： <br />
+<br />
+shell&gt;mysql -u root -p <br />
+<br />
+mysql&gt; update user set password=password(&rdquo;xueok654123&Prime;) where user=&rsquo;root&rsquo;; <br />
+<br />
+mysql&gt; flush privileges //刷新数据库 <br />
+<br />
+mysql&gt;use dbname； 打开数据库： <br />
+<br />
+mysql&gt;show databases; 显示所有数据库 <br />
+<br />
+mysql&gt;show tables; 显示数据库mysql中所有的表：先use mysql；然后 <br />
+<br />
+mysql&gt;describe user; 显示表mysql数据库中user表的列信息）； <br />
+<br />
+3、grant <br />
+<br />
+创建一个可以从任何地方连接服务器的一个完全的超级用户，但是必须使用一个口令something做这个 <br />
+<br />
+mysql&gt; grant all privileges on *.* to user@localhost identified by &rsquo;something&rsquo; with <br />
+<br />
+增加新用户 <br />
+<br />
+格式：grant select on 数据库.* to 用户名@登录主机 identified by &ldquo;密码&rdquo; <br />
+<br />
+GRANT ALL PRIVILEGES ON *.* TO monty@localhost IDENTIFIED BY &rsquo;something&rsquo; WITH GRANT OPTION; <br />
+<br />
+GRANT ALL PRIVILEGES ON *.* TO monty@&rdquo;%&rdquo; IDENTIFIED BY &rsquo;something&rsquo; WITH GRANT OPTION; <br />
+<br />
+删除授权： <br />
+<br />
+mysql&gt; revoke all privileges on *.* from root@&rdquo;%&rdquo;; <br />
+<br />
+mysql&gt; delete from user where user=&rdquo;root&rdquo; and host=&rdquo;%&rdquo;; <br />
+<br />
+mysql&gt; flush privileges; <br />
+<br />
+创建一个用户custom在特定客户端it363.com登录，可访问特定数据库fangchandb <br />
+<br />
+mysql &gt;grant select, insert, update, delete, create,drop on fangchandb.* to custom@ it363.com identified by &lsquo; passwd&rsquo; <br />
+<br />
+重命名表: <br />
+<br />
+mysql &gt; alter table t1 rename t2; <br />
+<br />
+4、mysqldump <br />
+<br />
+备份数据库 <br />
+<br />
+shell&gt; mysqldump -h host -u root -p dbname &gt;dbname_backup.sql <br />
+<br />
+恢复数据库 <br />
+<br />
+shell&gt; mysqladmin -h myhost -u root -p create dbname <br />
+<br />
+shell&gt; mysqldump -h host -u root -p dbname &lt; dbname_backup.sql <br />
+<br />
+如果只想卸出建表指令，则命令如下： <br />
+<br />
+shell&gt; mysqladmin -u root -p -d databasename &gt; a.sql <br />
+<br />
+如果只想卸出插入数据的sql命令，而不需要建表命令，则命令如下： <br />
+<br />
+shell&gt; mysqladmin -u root -p -t databasename &gt; a.sql <br />
+<br />
+那么如果我只想要数据，而不想要什么sql命令时，应该如何操作呢？ <br />
+<br />
+mysqldump -T./ phptest driver <br />
+<br />
+其中，只有指定了-T参数才可以卸出纯文本文件，表示卸出数据的目录，./表示当前目录，即与mysqldump同一目录。如果不指定driver 表，则将卸出整个数据库的数据。每个表会生成两个文件，一个为.sql文件，包含建表执行。另一个为.txt文件，只包含数据，且没有sql指令。 <br />
+<br />
+5、可将查询存储在一个文件中并告诉mysql从文件中读取查询而不是等待键盘输入。可利用外壳程序键入重定向实用程序来完成这项工作。例如，如果在文件my_file.sql 中存放有查 <br />
+<br />
+询，可如下执行这些查询： <br />
+<br />
+例如，如果您想将建表语句提前写在sql.txt中: <br />
+<br />
+mysql &gt; mysql -h myhost -u root -p database &lt; sql.txt</div>
+</pre>

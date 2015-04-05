@@ -1,0 +1,38 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>crontab</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">crontab</font>
+<br>
+
+<font size="2">2008-01-25 16:03:48</font>
+<p>
+<pre>
+在linux下可以用crontab添加计划任务。
+在terminal里打crontab -e，就可以编辑当前用户的计划任务，内容的格式如下：
+
+m h dom mon dow   command
+
+含义：
+m 分钟 0-59
+h 小时 1-24
+dom 一个月的第几天 1-31
+mon 月份 1-12
+dow 星期几 0-6 0是星期天
+command 要运行的命令
+
+其中前面5个字段的值可以是具体数字如6，或者1,2（表示1和2），或者2-4（表示2至4），或者*(任意）
+</pre>

@@ -1,0 +1,29 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>oracle jdbc驱动的版本问题</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">oracle jdbc驱动的版本问题</font>
+<br>
+
+<font size="2">2008-05-02 00:18:00</font>
+<p>
+<pre>
+　　前几天在用oracle里用到varchar(20 char)。Oracle里varchar的单位可以是byte或者char，1个汉字或1个字母都是1个char，在统计带中文的长文本的字数时非常实用。
+
+　　但是，我用hibernate做数据update时， 提示说can bind a LONG value only for insert into a LONG column。仔细检查了好久，排除了字符过长的可能，一开始总怀疑是编码的错误，后来怀疑hibernate的错，因为以前曾经遇到过 hibernate不同版本差异造成的问题。测试了很多次，都没找到原因。诡异的是那张表里都是varchar或date类型，根本没数字型的，居然出现那种错误。
+
+　　后来百度了好久，有人说可能是jdbc驱动的问题，我用的是10.0.2的驱动，dbms的版本是10.0.1，后来从数据库服务器上把oracle安装目录里的ojdbc找出来，替换掉，就可以了。那个jar包里的MENIFEST.MF里居然写着for jdk1.1，看文档里写着的ojdbc是for jdk1.4的。网上还说有for jdk 1.5的驱动，但不知道从那找到的。
+</pre>

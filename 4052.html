@@ -1,0 +1,42 @@
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<html>
+
+<head>
+<title>ssh -X</title>
+<style type="text/css">
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+<body>
+<font size="5">ssh -X</font>
+<br>
+
+<font size="2">2009-05-16 15:42:28</font>
+<p>
+<pre>
+<p>&nbsp;</p>
+<p>ssh 实在是个了不起的软件，衍生出scp、sshfs、sftp等等同样了不起的小工具。</p>
+<p>windows下 远程桌面 有很多限制，最多只支持两个用户同时登录。Linux下也有不少的远程软件，事实上，ssh本身就支持了，那就是-X参数。通过这个参数，后面运行一些GUI程序，都会在本地显示（X11 forwarding）。</p>
+<p>下面是man ssh中对-X的解释：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; -X&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Enables X11 forwarding.&nbsp; This can also be specified on a per-host<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; basis in a configuration file.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; X11 forwarding should be enabled with caution.&nbsp; Users with the<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ability to bypass file permissions on the remote host (for the<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; user's X authorization database) can access the local X11 display<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; through the forwarded connection.&nbsp; An attacker may then be able<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; to perform activities such as keystroke monitoring.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For this reason, X11 forwarding is subjected to X11 SECURITY<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; extension restrictions by default.&nbsp; Please refer to the ssh -Y<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; option and the ForwardX11Trusted directive in ssh_config(5) for<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; more information.<br />
+&nbsp;</p>
+</pre>
